@@ -1,5 +1,5 @@
-import com.payneteasy.datamasker.CardIssuerList;
-import com.payneteasy.datamasker.CardMasker;
+package com.payneteasy.panmask;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

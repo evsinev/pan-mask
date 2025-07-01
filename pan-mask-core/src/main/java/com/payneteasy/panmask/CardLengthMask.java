@@ -1,4 +1,4 @@
-package com.payneteasy.datamasker;
+package com.payneteasy.panmask;
 
 public class CardLengthMask {
     private int mask = 0;

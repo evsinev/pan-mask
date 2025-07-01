@@ -1,4 +1,4 @@
-package com.payneteasy.datamasker;
+package com.payneteasy.panmask;
 
 import java.util.List;
 

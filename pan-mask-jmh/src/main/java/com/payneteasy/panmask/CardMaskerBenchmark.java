@@ -1,7 +1,4 @@
-package com.payneteasy.datamasker;
-
-import com.payneteasy.datamasker.CardIssuerList;
-import com.payneteasy.datamasker.CardMasker;
+package com.payneteasy.panmask;
 
 import org.openjdk.jmh.annotations.*;
 import java.util.concurrent.TimeUnit;

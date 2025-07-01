@@ -1,10 +1,11 @@
-package com.payneteasy.datamasker;
+package com.payneteasy.panmask;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class CardIssuerList {
 
-    public static final List<CardIssuer> ALL_ISSUERS = List.of(
+    public static final List<CardIssuer> ALL_ISSUERS = Arrays.asList(
             new CardIssuer("American Express").prefix(34, 37).length(15),
             new CardIssuer("Bankcard").prefix(5610).prefixRange(560221, 560225).length(16),
             new CardIssuer("China T-Union").prefix(31).length(19),
