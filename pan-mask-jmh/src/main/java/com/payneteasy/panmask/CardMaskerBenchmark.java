@@ -1,6 +1,8 @@
 package com.payneteasy.panmask;
 
 import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.infra.Blackhole;
+
 import java.util.concurrent.TimeUnit;
 
 @BenchmarkMode(Mode.AverageTime)
@@ -20,103 +22,100 @@ public class CardMaskerBenchmark {
     }
 
     @Benchmark
-    public void testMaskCardNumbers_validCard_replace() {
-        String input = "[Binder:8356_1]  [on=onOnlineProc() ] Pan And Track [tlv=5A08512345000000000857135123450000000008D29092011920417300000F ]";
-        String expected = "[Binder:8356_1]  [on=onOnlineProc() ] Pan And Track [tlv=5A085***********000857135***********0008D29092011920417300000F ]";
-        String result = replaceSubstring(input, "5123450000000008", "5***********0008");
+    public void testMaskCardNumbers_validCard_replace(Blackhole aBlackhole) {
+        // expected = "[Binder:8356_1]  [on=onOnlineProc() ] Pan And Track [tlv=5A085***********000857135***********0008D29092011920417300000F ]";
+        String result = replaceSubstring("[Binder:8356_1]  [on=onOnlineProc() ] Pan And Track [tlv=5A08512345000000000857135123450000000008D29092011920417300000F ]", "5123450000000008", "5***********0008");
+        aBlackhole.consume(result);
     }
 
     @Benchmark
-    public void testMaskCardNumbers_validCard() {
-        String input = "[Binder:8356_1]  [on=onOnlineProc() ] Pan And Track [tlv=5A08512345000000000857135123450000000008D29092011920417300000F ]";
-        String expected = "[Binder:8356_1]  [on=onOnlineProc() ] Pan And Track [tlv=5A085***********000857135***********0008D29092011920417300000F ]";
-        String result = cardMasker.maskCardNumbers(input);
+    public void testMaskCardNumbers_validCard(Blackhole aBlackhole) {
+        // "[Binder:8356_1]  [on=onOnlineProc() ] Pan And Track [tlv=5A085***********000857135***********0008D29092011920417300000F ]";
+        String result = cardMasker.maskCardNumbers("[Binder:8356_1]  [on=onOnlineProc() ] Pan And Track [tlv=5A08512345000000000857135123450000000008D29092011920417300000F ]");
+        aBlackhole.consume(result);
     }
 
     @Benchmark
-    public void testMaskCardNumbers_shortCardNumber() {
-        String input = "5123450000000";
-        String expected = "5123450000000";
-        String result = cardMasker.maskCardNumbers(input);
+    public void testMaskCardNumbers_shortCardNumber(Blackhole aBlackhole) {
+        // expected = "5123450000000";
+        String result = cardMasker.maskCardNumbers("5123450000000");
+        aBlackhole.consume(result);
     }
 
     @Benchmark
-    public void testMaskCardNumbers_mastercard() {
-        String input = "5123450000000008";
-        String expected = "5***********0008";
-
-        String result = cardMasker.maskCardNumbers(input);
+    public void testMaskCardNumbers_mastercard(Blackhole aBlackhole) {
+        // expected = "5***********0008";
+        String result = cardMasker.maskCardNumbers("5123450000000008");
+        aBlackhole.consume(result);
     }
 
     @Benchmark
-    public void testMaskCardNumbers_visaElectron_replace() {
-        String input = "4026 1111 1111 1115";
-        String expected = "4*** **** **** 1115";
-
-        String result = replaceSubstring(input, "4026 1111 1111 1115", "4*** **** **** 1115");
+    public void testMaskCardNumbers_visaElectron_replace(Blackhole aBlackhole) {
+        // expected = "4*** **** **** 1115";
+        String result = replaceSubstring("4026 1111 1111 1115", "4026 1111 1111 1115", "4*** **** **** 1115");
+        aBlackhole.consume(result);
     }
 
     @Benchmark
-    public void testMaskCardNumbers_visaElectron() {
-        String input = "4026 1111 1111 1115";
-        String expected = "4*** **** **** 1115";
-
-        String result = cardMasker.maskCardNumbers(input);
+    public void testMaskCardNumbers_visaElectron(Blackhole aBlackhole) {
+        // expected = "4*** **** **** 1115";
+        String result = cardMasker.maskCardNumbers("4026 1111 1111 1115");
+        aBlackhole.consume(result);
     }
 
     @Benchmark
-    public void testMaskCardNumbers_separatedWithSpace() {
-        String input = "5123 4500 0000 0008";
-        String expected = "5*** **** **** 0008";
-        String result = cardMasker.maskCardNumbers(input);
+    public void testMaskCardNumbers_separatedWithSpace(Blackhole aBlackhole) {
+        // expected = "5*** **** **** 0008";
+        String result = cardMasker.maskCardNumbers("5123 4500 0000 0008");
+        aBlackhole.consume(result);
     }
 
     @Benchmark
-    public void testMaskCardNumbers_separatedWithDash() {
-        String input = "5123-4500-0000-0008";
-        String expected = "5***-****-****-0008";
-        String result = cardMasker.maskCardNumbers(input);
+    public void testMaskCardNumbers_separatedWithDash(Blackhole aBlackhole) {
+        // expected = "5***-****-****-0008";
+        String result = cardMasker.maskCardNumbers("5123-4500-0000-0008");
+        aBlackhole.consume(result);
     }
 
     @Benchmark
-    public void testMaskCardNumbers_skipHead() {
-        String input = "12345678901_5123450000000008";
-        String expected = "12345678901_5***********0008";
-        String result = cardMasker.maskCardNumbers(input);
+    public void testMaskCardNumbers_skipHead(Blackhole aBlackhole) {
+        // expected = "12345678901_5***********0008";
+        String result = cardMasker.maskCardNumbers("12345678901_5123450000000008");
+        aBlackhole.consume(result);
     }
 
     @Benchmark
-    public void testMaskCardNumbers_skipTail() {
-        String input = "5123450000000008_12345678901";
-        String expected = "5***********0008_12345678901";
-        String result = cardMasker.maskCardNumbers(input);
+    public void testMaskCardNumbers_skipTail(Blackhole aBlackhole) {
+        // expected = "5***********0008_12345678901";
+        String result = cardMasker.maskCardNumbers("5123450000000008_12345678901");
+        aBlackhole.consume(result);
     }
 
     @Benchmark
-    public void testMaskCardNumbers_mixed_replace() {
-        String input = "CARDS=[5123 4500 0000 0008 5123450000000008 5123-4500-0000-0008]";
-        String expected = "CARDS=[5*** **** **** 0008 5***********0008 5***-****-****-0008]";
-        String result = replaceSubstring(input, "5123450000000008", "5***********0008");
+    public void testMaskCardNumbers_mixed_replace(Blackhole aBlackhole) {
+        // expected = "CARDS=[5*** **** **** 0008 5***********0008 5***-****-****-0008]";
+        String result = replaceSubstring("CARDS=[5123 4500 0000 0008 5123450000000008 5123-4500-0000-0008]", "5123450000000008", "5***********0008");
+        aBlackhole.consume(result);
     }
 
     @Benchmark
-    public void testMaskCardNumbers_mixed() {
-        String input = "CARDS=[5123 4500 0000 0008 5123450000000008 5123-4500-0000-0008]";
-        String expected = "CARDS=[5*** **** **** 0008 5***********0008 5***-****-****-0008]";
-        String result = cardMasker.maskCardNumbers(input);
-        }
-
-    @Benchmark
-    public void testMaskCardNumbers_noCard() {
-        String input = "123450000000008";
-        String expected = "123450000000008";
-        String result = cardMasker.maskCardNumbers(input);
+    public void testMaskCardNumbers_mixed(Blackhole aBlackhole) {
+        // expected = "CARDS=[5*** **** **** 0008 5***********0008 5***-****-****-0008]";
+        String result = cardMasker.maskCardNumbers("CARDS=[5123 4500 0000 0008 5123450000000008 5123-4500-0000-0008]");
+        aBlackhole.consume(result);
     }
 
     @Benchmark
-    public void testMaskCardNumbers_emptyString() {
-        String input = "";
-        String expected = "";
-        String result = cardMasker.maskCardNumbers(input);
+    public void testMaskCardNumbers_noCard(Blackhole aBlackhole) {
+        // expected = "123450000000008";
+        String result = cardMasker.maskCardNumbers("123450000000008");
+        aBlackhole.consume(result);
+    }
+
+    @Benchmark
+    public void testMaskCardNumbers_emptyString(Blackhole aBlackhole) {
+        // expected = "";
+        String result = cardMasker.maskCardNumbers("");
+        aBlackhole.consume(result);
     }
 }
